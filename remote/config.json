@@ -1,0 +1,42 @@
+{
+  "config_version": 1,
+  "app_title": "مهامي",
+  "welcome_message": "أهلاً بك 👋 خلّنا ننجز اليوم!",
+  "theme": {
+    "primary_color": "#4F46E5",
+    "dark_mode": false
+  },
+  "announcement": {
+    "enabled": true,
+    "text": "🎉 مرحباً بك في النسخة الأولى! هذا الإعلان يتغير عن بعد.",
+    "color": "#F59E0B",
+    "url": null
+  },
+  "maintenance": {
+    "enabled": false,
+    "message": "التطبيق تحت الصيانة، نعود قريباً."
+  },
+  "features": {
+    "show_stats": true,
+    "show_priority": true,
+    "show_categories": true,
+    "allow_delete": true,
+    "show_tips": true
+  },
+  "categories": ["عام", "عمل", "شخصي", "تسوق", "دراسة"],
+  "tips": [
+    "ابدأ بالمهمة الأصعب أولاً 🐸",
+    "قسّم المهام الكبيرة إلى خطوات صغيرة",
+    "اسحب المهمة لليسار لحذفها",
+    "اسحب الشاشة للأسفل لجلب آخر التحديثات"
+  ],
+  "remote_tasks": [
+    {
+      "id": "welcome-1",
+      "title": "جرّب إضافة مهمة جديدة ✍️",
+      "note": "هذه المهمة أُرسلت عن بعد من ملف config.json",
+      "category": "عام",
+      "priority": "low"
+    }
+  ]
+}

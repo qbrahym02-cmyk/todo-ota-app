@@ -1,0 +1,62 @@
+name: 📦 Release Android APK (تحديث كامل)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'رقم الإصدار (مثال 1.0.1)'
+        required: true
+        default: '1.0.0'
+      notes:
+        description: 'ما الجديد في هذا الإصدار؟'
+        required: false
+        default: 'تحسينات وإصلاحات'
+      force:
+        description: 'تحديث إجباري؟'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Restore signing key
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEY_PROPERTIES: ${{ secrets.ANDROID_KEY_PROPERTIES }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 -d > android/app/upload-keystore.p12
+          echo "$KEY_PROPERTIES" > android/key.properties
+
+      - name: Build APK
+        run: |
+          flutter pub get
+          flutter test
+          flutter build apk --release \
+            --build-name=${{ inputs.version }} \
+            --build-number=${{ github.run_number }}
+          cp build/app/outputs/flutter-apk/app-release.apk todo-${{ inputs.version }}.apk
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.version }}+${{ github.run_number }}
+          name: الإصدار ${{ inputs.version }}
+          body: ${{ inputs.notes }}${{ inputs.force && ' [force]' || '' }}
+          files: todo-${{ inputs.version }}.apk
+          make_latest: true
